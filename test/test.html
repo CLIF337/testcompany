@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Меню приложение</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #d4f805 0%, #5508a1 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    #app {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    .nav {
+      display: flex;
+      background: #f8f9fa;
+      border-bottom: 2px solid #e9ecef;
+    }
+    
+    .nav button {
+      flex: 1;
+      padding: 20px;
+      border: none;
+      background: none;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #495057;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .nav button:hover {
+      background: #e9ecef;
+    }
+    
+    .nav button.active {
+      background: #e4136a;
+      color: white;
+    }
+    
+    .page {
+      padding: 30px;
+    }
+    
+    .greeting {
+      text-align: center;
+    }
+    
+    .greeting h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .greeting p {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .greeting button {
+      padding: 15px 40px;
+      background: #e4136a;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 10px 20px #7c7377;
+    }
+    
+    .greeting button:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(118, 75, 162, 0.4);
+    }
+    
+    .menu-header {
+      background: #e4136a;
+;
+      color: white;
+      padding: 25px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .menu-header h2 {
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    
+    .stats span {
+      background: rgba(255,255,255,0.2);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      backdrop-filter: blur(5px);
+    }
+    
+    .selected-items {
+      background: rgba(255,255,255,0.15);
+      padding: 15px;
+      border-radius: 15px;
+      font-size: 1.1rem;
+      word-break: break-word;
+    }
+    
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      transition: all 0.3s;
+    }
+    
+    .menu-item:hover {
+      border-color: #e4136a;;
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .menu-item input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      margin-right: 15px;
+      cursor: pointer;
+      accent-color: #e4136a;
+;
+    }
+    
+    .menu-item label {
+      flex: 1;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #333;
+      cursor: pointer;
+    }
+    
+    .item-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #e4136a;
+      background: white;
+      padding: 5px 15px;
+      border-radius: 50px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .summary {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f0f3ff;
+      border-radius: 15px;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #333;
+      border: 2px dashed #e4136a;
+    }
+    
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .back-link button {
+      padding: 12px 30px;
+      background: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .back-link button:hover {
+      background: #5a6268;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    
+    const MENU_ITEMS = [
+      { id: 1, name: 'Эспрессо', price: 120 },
+      { id: 2, name: 'Капучино', price: 180 },
+      { id: 3, name: 'Латте', price: 200 },
+      { id: 4, name: 'Мокка', price: 220 },
+      { id: 5, name: 'Американо', price: 150 },
+      { id: 6, name: 'Раф', price: 250 },
+      { id: 7, name: 'Глясе', price: 190 },
+      { id: 8, name: 'Флэт Уайт', price: 210 }
+    ];
+
+    let currentPage = 'welcome';
+    let selectedItems = [];
+
+    function renderWelcomePage() {
+      return `
+        <div class="nav">
+          <button class="active">Главная</button>
+          <button onclick="navigateTo('menu')">Меню</button>
+        </div>
+        <div class="page">
+          <div class="greeting">
+            <h1>Гутин Александр Юрьевич</h1>
+            <p>Тестовое задание по Frontend-разработке</p>
+            <button onclick="navigateTo('menu')">Перейти к меню →</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMenuPage() {
+      const selectedCount = selectedItems.length;
+      const totalPrice = selectedItems.reduce((sum, item) => sum + item.price, 0);
+      const selectedNames = selectedItems.length ? selectedItems.map(item => item.name).join(', ') : 'Ничего не выбрано';
+
+      const menuItemsHTML = MENU_ITEMS.map(item => {
+        const isChecked = selectedItems.some(i => i.id === item.id);
+        return `
+          <div class="menu-item">
+            <input 
+              type="checkbox" 
+              id="item${item.id}"
+              ${isChecked ? 'checked' : ''}
+              onchange="toggleItem(${item.id})"
+            >
+            <label for="item${item.id}">${item.name}</label>
+            <span class="item-price">${item.price} ₽</span>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="nav">
+          <button onclick="navigateTo('welcome')">Главная</button>
+          <button class="active">Меню</button>
+        </div>
+        <div class="page">
+          <div class="menu-header">
+            <h2>📋 Наше меню</h2>
+            <div class="stats">
+              <span>✅ Выбрано: ${selectedCount}</span>
+              <span>💰 Сумма: ${totalPrice} ₽</span>
+            </div>
+            <div class="selected-items">
+              <strong>Текущий выбор:</strong> ${selectedNames}
+            </div>
+          </div>
+
+          ${menuItemsHTML}
+
+          <div class="summary">
+            <span>Всего пунктов: ${MENU_ITEMS.length}</span>
+            <span>Активно: ${selectedCount}</span>
+            <span>Итого: ${totalPrice} ₽</span>
+          </div>
+
+          <div class="back-link">
+            <button onclick="navigateTo('welcome')">← На главную</button>
+          </div>
+        </div>
+      `;
+    }
+
+    window.navigateTo = function(page) {
+      currentPage = page;
+      renderApp();
+    };
+
+    //чекбокс
+    window.toggleItem = function(itemId) {
+      const item = MENU_ITEMS.find(i => i.id === itemId);
+      const index = selectedItems.findIndex(i => i.id === itemId);
+      
+      if (index === -1) {
+        selectedItems.push(item);
+      } else {
+        selectedItems.splice(index, 1);
+      }
+      
+      renderApp();
+    };
+
+    //рендеринг
+    function renderApp() {
+      const app = document.getElementById('app');
+      
+      if (currentPage === 'welcome') {
+        app.innerHTML = renderWelcomePage();
+      } else {
+        app.innerHTML = renderMenuPage();
+      }
+    }
+
+    renderApp();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const app = document.getElementById('app');
+      app.style.opacity = '0';
+      app.style.transform = 'translateY(20px)';
+      app.style.transition = 'all 0.5s ease';
+      
+      setTimeout(() => {
+        app.style.opacity = '1';
+        app.style.transform = 'translateY(0)';
+      }, 100);
+    });
+  </script>
+</body>
+</html>
